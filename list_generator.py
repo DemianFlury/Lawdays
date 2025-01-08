@@ -15,11 +15,12 @@ def generate_list(input_path, output_path):
         timeslots.append(i)
     # timeslots = [1, 2, 3]
 
-    # Priority scores: attendee -> stand -> timeslot
+    # TODO: read preferences from csv and convert to dictionary
+    # Priority scores: attendee -> stand
     preferences = {
-        "Alice": {"Stand A": [3, 2, 1], "Stand B": [1, 3, 2], "Stand C": [2, 1, 3], "Stand D": [0, 0, 0]},
-        "Bob": {"Stand A": [2, 3, 1], "Stand B": [3, 2, 1], "Stand C": [1, 1, 2], "Stand D": [0, 0, 0]},
-        "Charlie": {"Stand A": [3, 3, 3], "Stand B": [2, 2, 2], "Stand C": [1, 1, 1], "Stand D": [0, 0, 0]},
+        "Alice": {"Stand A": 0, "Stand B": 2, "Stand C": 1, "Stand D": 3},
+        "Bob": {"Stand A": 2, "Stand B": 3, "Stand C": 0, "Stand D": 1},
+        "Charlie": {"Stand A": 3, "Stand B": 2, "Stand C": 1, "Stand D": 0},
     }
 
     # Define the problem
@@ -30,7 +31,7 @@ def generate_list(input_path, output_path):
 
     # Objective: Maximize total preferences
     problem += pulp.lpSum(
-        preferences[n][s][t - 1] * x[n][s][t] for n in names for s in stands for t in timeslots
+        preferences[n][s] * x[n][s][t] for n in names for s in stands for t in timeslots
     )
 
     # Constraints: One stand per attendee per timeslot
