@@ -1,0 +1,6 @@
+Name,Priority 1,Priority 2,Priority 3
+Alice,Stand A,Stand B,Stand C
+Bob,Stand B,Stand A,Stand C
+Charlie,Stand C,Stand A,Stand B
+David,Stand A,Stand C,Stand B
+Eve,Stand B,Stand C,Stand A
