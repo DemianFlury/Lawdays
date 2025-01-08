@@ -8,17 +8,18 @@ def generate_list(input_path, output_path):
         attendees = list(reader)
 
     # Example data
-    names = attendees['Name'] # TODO: read column name from settings
+    names = ["Alice", "Bob", "Charlie"] # TODO: read names from csv
     stands = ["Stand A", "Stand B", "Stand C", "Stand D"] # TODO: read stands from settings
     timeslots = []
     for i in range(1, 4): # TODO: read amount of timeslots from settings
         timeslots.append(i)
+    # timeslots = [1, 2, 3]
 
     # Priority scores: attendee -> stand -> timeslot
     preferences = {
         "Alice": {"Stand A": [3, 2, 1], "Stand B": [1, 3, 2], "Stand C": [2, 1, 3], "Stand D": [0, 0, 0]},
         "Bob": {"Stand A": [2, 3, 1], "Stand B": [3, 2, 1], "Stand C": [1, 1, 2], "Stand D": [0, 0, 0]},
-        "Charlie": {"Stand A": [1, 1, 3], "Stand B": [2, 2, 1], "Stand C": [3, 3, 2], "Stand D": [0, 0, 0]},
+        "Charlie": {"Stand A": [3, 3, 3], "Stand B": [2, 2, 2], "Stand C": [1, 1, 1], "Stand D": [0, 0, 0]},
     }
 
     # Define the problem
@@ -35,10 +36,10 @@ def generate_list(input_path, output_path):
     # Constraints: One stand per attendee per timeslot
     for n in names:
         for t in timeslots:
-            problem += pulp.lpSum(x[n][s][t] for s in stands) <= 1
+            problem += pulp.lpSum(x[n][s][t] for s in stands) <= 1 # TODO: read stand capacity from settings
 
     # Constraints: Optional stand capacity (e.g., 2 per stand per timeslot)
-    stand_capacity = 2
+    stand_capacity = 1
     for s in stands:
         for t in timeslots:
             problem += pulp.lpSum(x[n][s][t] for n in names) <= stand_capacity
@@ -46,17 +47,23 @@ def generate_list(input_path, output_path):
     # Constraint: Each attendee can visit a stand at most once across all timeslots
     for n in names:
         for s in stands:
-            problem += pulp.lpSum(x[a][s][t] for t in timeslots) <= 1
+            problem += pulp.lpSum(x[n][s][t] for t in timeslots) <= 1
 
     # Solve
     problem.solve()
 
     # Output results
-    for a in attendees:
+    output = {n: [""] * len(timeslots) for n in names}
+    for n in names:
         for t in timeslots:
             for s in stands:
-                if x[a][s][t].value() == 1:
-                    print(f"Attendee {a} is assigned to {s} at timeslot {t}")
+                if pulp.value(x[n][s][t]) == 1:
+                    output[n][t - 1] = s
+
+    # Print results
+    print("Name", *["Timeslot " + str(t) for t in timeslots], sep=", ")
+    for n in names:
+        print(n, *output[n], sep=", ")
 
 
 # Example usage
