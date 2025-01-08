@@ -1,6 +1,5 @@
 import pulp
 import csv
-from collections import defaultdict, deque
 
 def generate_list(input_path, output_path):
     # Read the CSV file
@@ -8,33 +7,57 @@ def generate_list(input_path, output_path):
         reader = csv.DictReader(csvfile)
         attendees = list(reader)
 
-    # Create a dictionary to store priorities
-    priority_dict = defaultdict(deque)
+    # Example data
+    names = attendees['Name'] # TODO: read column name from settings
+    stands = ["Stand A", "Stand B", "Stand C", "Stand D"] # TODO: read stands from settings
+    timeslots = []
+    for i in range(1, 4): # TODO: read amount of timeslots from settings
+        timeslots.append(i)
 
-    # Process each attendee and their priorities
-    for attendee in attendees:
-        name = attendee['Name']
-        priorities = [attendee[f'Priority {i}'] for i in range(1, 2) if attendee[f'Priority {i}']]
-        for priority in priorities:
-            priority_dict[priority].append(name)
+    # Priority scores: attendee -> stand -> timeslot
+    preferences = {
+        "Alice": {"Stand A": [3, 2, 1], "Stand B": [1, 3, 2], "Stand C": [2, 1, 3], "Stand D": [0, 0, 0]},
+        "Bob": {"Stand A": [2, 3, 1], "Stand B": [3, 2, 1], "Stand C": [1, 1, 2], "Stand D": [0, 0, 0]},
+        "Charlie": {"Stand A": [1, 1, 3], "Stand B": [2, 2, 1], "Stand C": [3, 3, 2], "Stand D": [0, 0, 0]},
+    }
 
-    # Create the output list respecting priorities and capacity
-    output_list = []
-    stand_capacity = defaultdict(int)
-    max_capacity = 2
+    # Define the problem
+    problem = pulp.LpProblem("Fair_Stand_Assignment", pulp.LpMaximize)
 
-    for priority, names in priority_dict.items():
-        while names and stand_capacity[priority] < max_capacity:
-            name = names.popleft()
-            output_list.append({'Name': name, 'Stand': priority})
-            stand_capacity[priority] += 1
+    # Define variables
+    x = pulp.LpVariable.dicts("x", (names, stands, timeslots), cat="Binary")
 
-    # Write the output list to a new CSV file
-    with open(output_path, mode='w', newline='') as csvfile:
-        fieldnames = ['Name', 'Stand']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(output_list)
+    # Objective: Maximize total preferences
+    problem += pulp.lpSum(
+        preferences[n][s][t - 1] * x[n][s][t] for n in names for s in stands for t in timeslots
+    )
+
+    # Constraints: One stand per attendee per timeslot
+    for n in names:
+        for t in timeslots:
+            problem += pulp.lpSum(x[n][s][t] for s in stands) <= 1
+
+    # Constraints: Optional stand capacity (e.g., 2 per stand per timeslot)
+    stand_capacity = 2
+    for s in stands:
+        for t in timeslots:
+            problem += pulp.lpSum(x[n][s][t] for n in names) <= stand_capacity
+
+    # Constraint: Each attendee can visit a stand at most once across all timeslots
+    for n in names:
+        for s in stands:
+            problem += pulp.lpSum(x[a][s][t] for t in timeslots) <= 1
+
+    # Solve
+    problem.solve()
+
+    # Output results
+    for a in attendees:
+        for t in timeslots:
+            for s in stands:
+                if x[a][s][t].value() == 1:
+                    print(f"Attendee {a} is assigned to {s} at timeslot {t}")
+
 
 # Example usage
 if __name__ == "__main__":
