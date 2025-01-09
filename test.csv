@@ -1,6 +1,61 @@
-name,p1,p2,p3
-Alice,Stand D,Stand B,Stand C
-Bob,Stand B,Stand A,Stand D
-Charlie,Stand C,Stand A,Stand D
-David,Stand A,Stand C,Stand B
-Eve,Stand B,Stand D,Stand A
+name,p1,p2,p3,email,studiengang,semester
+Student1,h,c,f,student1@university.edu,Engineering,Summer 2025
+Student2,k,e,j,student2@university.edu,History,Spring 2025
+Student3,e,b,k,student3@university.edu,Engineering,Summer 2025
+Student4,c,e,a,student4@university.edu,Biology,Summer 2025
+Student5,b,c,f,student5@university.edu,Engineering,Fall 2024
+Student6,b,d,a,student6@university.edu,Computer Science,Fall 2025
+Student7,h,d,b,student7@university.edu,Engineering,Fall 2024
+Student8,e,c,j,student8@university.edu,Computer Science,Spring 2025
+Student9,d,j,g,student9@university.edu,Engineering,Summer 2025
+Student10,d,j,e,student10@university.edu,Engineering,Fall 2025
+Student11,i,g,k,student11@university.edu,Biology,Fall 2024
+Student12,a,k,f,student12@university.edu,Computer Science,Spring 2025
+Student13,k,a,h,student13@university.edu,Computer Science,Summer 2025
+Student14,e,i,a,student14@university.edu,Biology,Summer 2025
+Student15,j,k,c,student15@university.edu,Computer Science,Fall 2024
+Student16,d,b,j,student16@university.edu,Biology,Spring 2025
+Student17,a,g,b,student17@university.edu,Physics,Summer 2025
+Student18,f,e,j,student18@university.edu,Engineering,Fall 2024
+Student19,e,k,h,student19@university.edu,Computer Science,Fall 2025
+Student20,e,j,d,student20@university.edu,Physics,Spring 2025
+Student21,c,f,i,student21@university.edu,History,Spring 2025
+Student22,j,a,d,student22@university.edu,History,Summer 2025
+Student23,h,k,e,student23@university.edu,History,Fall 2024
+Student24,a,h,e,student24@university.edu,Computer Science,Fall 2024
+Student25,f,a,g,student25@university.edu,Engineering,Spring 2025
+Student26,b,j,f,student26@university.edu,Mathematics,Spring 2025
+Student27,k,f,c,student27@university.edu,Engineering,Summer 2025
+Student28,k,i,a,student28@university.edu,Mathematics,Fall 2024
+Student29,f,d,c,student29@university.edu,Computer Science,Fall 2024
+Student30,h,i,a,student30@university.edu,Physics,Fall 2024
+Student31,i,e,c,student31@university.edu,Mathematics,Summer 2025
+Student32,i,c,g,student32@university.edu,Physics,Spring 2025
+Student33,c,d,j,student33@university.edu,Physics,Summer 2025
+Student34,e,a,h,student34@university.edu,History,Fall 2025
+Student35,j,i,h,student35@university.edu,Biology,Fall 2024
+Student36,b,k,g,student36@university.edu,Physics,Spring 2025
+Student37,a,f,h,student37@university.edu,History,Fall 2025
+Student38,g,c,h,student38@university.edu,Engineering,Fall 2024
+Student39,h,d,e,student39@university.edu,Engineering,Spring 2025
+Student40,g,f,b,student40@university.edu,History,Summer 2025
+Student41,h,c,f,student41@university.edu,Biology,Spring 2025
+Student42,h,i,f,student42@university.edu,Physics,Fall 2025
+Student43,i,c,k,student43@university.edu,Physics,Fall 2024
+Student44,g,e,d,student44@university.edu,Physics,Spring 2025
+Student45,f,h,c,student45@university.edu,Engineering,Spring 2025
+Student46,a,i,k,student46@university.edu,Biology,Spring 2025
+Student47,b,g,f,student47@university.edu,History,Spring 2025
+Student48,d,i,a,student48@university.edu,Biology,Spring 2025
+Student49,h,g,d,student49@university.edu,Biology,Fall 2025
+Student50,g,i,a,student50@university.edu,Engineering,Fall 2024
+Student51,c,k,b,student51@university.edu,Computer Science,Fall 2025
+Student52,h,i,d,student52@university.edu,Biology,Spring 2025
+Student53,j,f,a,student53@university.edu,Engineering,Fall 2025
+Student54,j,e,c,student54@university.edu,Computer Science,Spring 2025
+Student55,k,b,d,student55@university.edu,Biology,Fall 2024
+Student56,f,g,i,student56@university.edu,Computer Science,Spring 2025
+Student57,e,k,d,student57@university.edu,Biology,Spring 2025
+Student58,j,k,i,student58@university.edu,Physics,Summer 2025
+Student59,f,e,g,student59@university.edu,Physics,Fall 2024
+Student60,e,j,c,student60@university.edu,Mathematics,Spring 2025
