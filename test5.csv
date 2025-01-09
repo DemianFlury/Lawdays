@@ -1,4 +1,4 @@
-name,p1,p2,p3,p4,p5,email,studiengang,semester
+Name,Priorität1,Priorität2,Priorität3,Priorität4,Priorität5,Email,Studiengang,Semester
 Student1,d,k,a,d,h,student1@university.edu,Physics,Fall 2024
 Student2,f,b,c,j,e,student2@university.edu,Biology,Fall 2025
 Student3,f,c,k,f,d,student3@university.edu,Mathematics,Fall 2025

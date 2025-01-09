@@ -25,22 +25,23 @@ def open_settings():
     # Create new window
     settings_window = tk.Toplevel(root)
     settings_window.title("Settings")
+    settings_window.resizable(False, False)
 
     # Create labels and entries for each setting
-    tk.Label(settings_window, text="Stands (comma separated):").grid(row=0, column=0, padx=10, pady=5)
-    stands_entry = tk.Entry(settings_window, width=50)
+    tk.Label(settings_window, text="Stands (comma separated):", font=font).grid(row=0, column=0, padx=10, pady=5)
+    stands_entry = tk.Entry(settings_window, width=50, font=font)
     stands_entry.grid(row=0, column=1, padx=10, pady=5)
 
-    tk.Label(settings_window, text="Timeslots:").grid(row=1, column=0, padx=10, pady=5)
-    timeslots_entry = tk.Entry(settings_window, width=50,)
+    tk.Label(settings_window, text="Timeslots:", font=font).grid(row=1, column=0, padx=10, pady=5)
+    timeslots_entry = tk.Entry(settings_window, width=50, font=font)
     timeslots_entry.grid(row=1, column=1, padx=10, pady=5)
 
-    tk.Label(settings_window, text="Stand Capacity:").grid(row=2, column=0, padx=10, pady=5)
-    stand_capacity_entry = tk.Entry(settings_window, width=50)
+    tk.Label(settings_window, text="Stand Capacity:", font=font).grid(row=2, column=0, padx=10, pady=5)
+    stand_capacity_entry = tk.Entry(settings_window, width=50, font=font)
     stand_capacity_entry.grid(row=2, column=1, padx=10, pady=5)
 
-    tk.Label(settings_window, text="Number of Priorities:").grid(row=5, column=0, padx=10, pady=5)
-    num_priorities_entry = tk.Entry(settings_window, width=50)
+    tk.Label(settings_window, text="Number of Priorities:", font=font).grid(row=5, column=0, padx=10, pady=5)
+    num_priorities_entry = tk.Entry(settings_window, width=50, font=font)
     num_priorities_entry.grid(row=5, column=1, padx=10, pady=5)
 
     if(settings.timeslots):
@@ -53,7 +54,7 @@ def open_settings():
         stands_entry.insert(0, ",".join(settings.stands))
 
     # Save button
-    tk.Button(settings_window, text="Save", command=save_settings).grid(row=6, column=0, columnspan=3, pady=10)
+    tk.Button(settings_window, text="Save", command=save_settings, font=font).grid(row=6, column=0, columnspan=3, pady=10)
 
 
 # function to generate the attendee list
@@ -91,10 +92,7 @@ root = tk.Tk()
 root.title("Lawdays Attendee List Generator")
 title_font = ("Helvetica", 25, "bold")
 font = ("Helvetica", 15)
-
-# set window size
-#root.geometry("640x300")
-#root.resizable(False, False)
+root.resizable(False, False)
 
 # title
 title = tk.Label(root, text="Lawdays Attendee List Generator", font=title_font)
@@ -134,7 +132,7 @@ settings_button = tk.Button(root, text="Settings", font=font, command=open_setti
 settings_button.grid(row=6, column=0, pady=10)
 
 # doc Button
-documentation_button = tk.Button(root, text="Documentation", font=font, 
+documentation_button = tk.Button(root, text="Documentation & Instructions", font=font, 
                                  command=lambda: webbrowser.open("https://github.com/DemianFlury/Lawdays/blob/main/README.md"))
 documentation_button.grid(row=6, column=1, pady=10)
 

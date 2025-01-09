@@ -22,11 +22,11 @@ def generate_list(settings):
     # Read the CSV file
     with open(settings.input_path, mode='r', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
-        attendees = [Attendee(row['name'], 
-                              row['email'], 
-                              [row[f'p{i+1}'] for i in range(settings.num_priorities)],
-                              row['studiengang'],
-                              row['semester']) for row in reader]
+        attendees = [Attendee(row['Name'], 
+                              row['Email'], 
+                              [row[f'Priorität{i+1}'] for i in range(settings.num_priorities)],
+                              row['Studiengang'],
+                              row['Semester']) for row in reader]
 
     names = [attendee.name for attendee in attendees]
     timeslots = list(range(1, settings.timeslots + 1))
@@ -91,15 +91,3 @@ def generate_list(settings):
             writer.writerow(row)
 
     return True
-
-# Example usage
-if __name__ == "__main__":
-    settings = Settings(
-        stands=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"],
-        timeslots=5,
-        stand_capacity=12,
-        input_path='test5.csv',
-        output_path='output.csv',
-        num_priorities=5
-    )
-    generate_list(settings)
