@@ -90,6 +90,8 @@ def generate_list(settings):
             row.update({'Studiengang': attendee.major, 'Semester': attendee.semester})
             writer.writerow(row)
 
+    return True
+
 # Example usage
 if __name__ == "__main__":
     settings = Settings(
