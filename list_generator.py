@@ -2,24 +2,21 @@ import pulp
 import csv
 
 class Settings:
-    def __init__(self, stands, timeslots, stand_capacity, input_path, output_path):
+    def __init__(self, stands, timeslots, stand_capacity, input_path, output_path, num_priorities):
         self.stands = stands
         self.timeslots = timeslots
         self.stand_capacity = stand_capacity
         self.input_path = input_path
         self.output_path = output_path
+        self.num_priorities = num_priorities
 
 class Attendee:
-    def __init__(self, name, email, p1, p2, p3, major, semester):
+    def __init__(self, name, email, priorities, major, semester):
         self.name = name
         self.email = email
         self.semester = semester
         self.major = major
-        self.preferences = {
-            p1: 3,
-            p2: 2,
-            p3: 1
-        }
+        self.preferences = {priority: len(priorities) - i for i, priority in enumerate(priorities)}
 
 def generate_list(settings):
     # Read the CSV file
@@ -27,13 +24,10 @@ def generate_list(settings):
         reader = csv.DictReader(csvfile)
         attendees = [Attendee(row['name'], 
                               row['email'], 
-                              row['p1'], 
-                              row['p2'], 
-                              row['p3'],
+                              [row[f'p{i+1}'] for i in range(settings.num_priorities)],
                               row['studiengang'],
                               row['semester']) for row in reader]
 
-    # Example data
     names = [attendee.name for attendee in attendees]
     timeslots = list(range(1, settings.timeslots + 1))
 
@@ -64,7 +58,7 @@ def generate_list(settings):
         for s in settings.stands:
             problem += pulp.lpSum(x[n][s][t] for t in timeslots) <= 1
 
-    # Solve
+    # Solve the problem
     problem.solve()
 
     # Debugging output: Print the status of the solution
@@ -83,6 +77,7 @@ def generate_list(settings):
             for s in settings.stands:
                 if pulp.value(x[n][s][t]) == 1:
                     output[n][t - 1] = s
+                    break
 
     # Write the output list to a new CSV file
     with open(settings.output_path, mode='w', newline='') as csvfile:
@@ -92,14 +87,17 @@ def generate_list(settings):
         for attendee in attendees:
             row = {'Name': attendee.name, 'Email': attendee.email}
             row.update({f'Timeslot {t}': output[attendee.name][t - 1] for t in timeslots})
-            row.update({f'Studiengang': attendee.major, 'Semester': attendee.semester})
+            row.update({'Studiengang': attendee.major, 'Semester': attendee.semester})
             writer.writerow(row)
 
 # Example usage
 if __name__ == "__main__":
-    settings = Settings(stands=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"],
-                        timeslots=3,
-                        stand_capacity=12,
-                        input_path='test.csv',
-                        output_path='output.csv')
+    settings = Settings(
+        stands=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"],
+        timeslots=5,
+        stand_capacity=12,
+        input_path='test5.csv',
+        output_path='output.csv',
+        num_priorities=5
+    )
     generate_list(settings)
