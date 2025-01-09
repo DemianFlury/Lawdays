@@ -2,8 +2,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 import webbrowser
 import list_generator
-
-
+import os
 
 # function to open a file dialog and insert the selected file path into the given entry
 def open_file_dialog(entry):
@@ -15,6 +14,20 @@ def open_file_dialog(entry):
 # function to open the settings window
 def open_settings():
     def save_settings():
+
+        if not stands_entry.get():
+            messagebox.showerror("Error", "Please enter the stands.")
+            return
+        if not timeslots_entry.get():
+            messagebox.showerror("Error", "Please enter the number of timeslots.")
+            return
+        if not stand_capacity_entry.get():
+            messagebox.showerror("Error", "Please enter the stand capacity.")
+            return
+        if not num_priorities_entry.get():
+            messagebox.showerror("Error", "Please enter the number of priorities.")
+            return
+        
         settings.stands = stands_entry.get().split(',')
         settings.timeslots = int(timeslots_entry.get())
         settings.stand_capacity = int(stand_capacity_entry.get())
@@ -68,10 +81,13 @@ def generate_list():
         error_message = "Please select an input file."
     elif not settings.output_path:
         error_message = "Please select an output file."
+    elif not os.path.exists(settings.input_path):
+        error_message = "The input file does not exist."
     elif not settings.input_path.endswith(".csv"):
         error_message = "The input file must be a CSV file."
     elif not settings.output_path.endswith(".csv"):    
         error_message = "The output file must be a CSV file."
+    
 
     if error_message:
         messagebox.showerror("Error", error_message)
