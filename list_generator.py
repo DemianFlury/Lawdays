@@ -8,14 +8,9 @@ def generate_list(input_path, output_path, stand_capacity):
         attendees = list(reader)
 
     # Example data
-    names = []
-    for attendee in attendees:
-        names.append(attendee['name'])
-    stands = ["Stand A", "Stand B", "Stand C", "Stand D"] # TODO: read stands from settings
-    timeslots = []
-    for i in range(1, 4): # TODO: read amount of timeslots from settings
-        timeslots.append(i)
-    # timeslots = [1, 2, 3]
+    names = [attendee['name'] for attendee in attendees]
+    stands = ["Stand A", "Stand B", "Stand C", "Stand D"]  # TODO: read stands from settings
+    timeslots = list(range(1, 4))  # TODO: read amount of timeslots from settings
 
     # Read preferences from csv and convert to dictionary
     preferences = {}
@@ -46,8 +41,8 @@ def generate_list(input_path, output_path, stand_capacity):
     # Constraints: One stand per attendee per timeslot
     for n in names:
         for t in timeslots:
-            problem += pulp.lpSum(x[n][s][t] for s in stands) == 1
-            
+            problem += pulp.lpSum(x[n][s][t] for s in stands) <= 1
+
     # Constraints: Stand capacity per timeslot
     for s in stands:
         for t in timeslots:
@@ -68,14 +63,14 @@ def generate_list(input_path, output_path, stand_capacity):
     for n in names:
         for t in timeslots:
             for s in stands:
-                print(f"x[{n}][{s}][{t}] = {pulp.value(x[n][s][t])}")
+                print(f"x[{n}][{s}][{t}] = {x[n][s][t].varValue}")
 
     # Output results
     output = {n: [""] * len(timeslots) for n in names}
     for n in names:
         for t in timeslots:
             for s in stands:
-                if pulp.value(x[n][s][t]) == 1:
+                if x[n][s][t].varValue == 1:
                     output[n][t - 1] = s
 
     # Print results
@@ -85,4 +80,4 @@ def generate_list(input_path, output_path, stand_capacity):
 
 # Example usage
 if __name__ == "__main__":
-    generate_list('test.csv', 'output.csv', 1)
+    generate_list('test.csv', 'output.csv', 2)
