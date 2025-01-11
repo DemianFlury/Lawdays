@@ -12,12 +12,14 @@ class Settings:
         self.num_priorities = num_priorities
 
 class Attendee:
-    def __init__(self, name, email, priorities, major, semester):
+    def __init__(self, name, email, priorities, major, semester, lunch, mock_interview):
         self.name = name
         self.email = email
         self.semester = semester
         self.major = major
         self.preferences = {priority: len(priorities) - i for i, priority in enumerate(priorities)}
+        self.lunch = lunch
+        self.mock_interview = mock_interview
 
 def generate_list(settings):
     error_code = 0
@@ -29,9 +31,11 @@ def generate_list(settings):
         try:
             attendees = [Attendee(row['Name'], 
                               row['Email'], 
-                              [row[f'Priorität{i+1}'] for i in range(settings.num_priorities)],
+                              [row[f'Priorität {i+1}'] for i in range(settings.num_priorities)],
                               row['Studiengang'],
-                              row['Semester']) for row in reader]
+                              row['Semester'],
+                              row['Mittagessen'],
+                              row['Mock Interview']) for row in reader]
         except KeyError:
             error_code = 2
             return error_code
@@ -112,7 +116,10 @@ def generate_list(settings):
         for attendee in attendees:
             row = {'Name': attendee.name, 'Email': attendee.email}
             row.update({f'Timeslot {t}': output[attendee.name][t - 1] for t in timeslots})
-            row.update({'Studiengang': attendee.major, 'Semester': attendee.semester})
+            row.update({'Studiengang': attendee.major, 
+                        'Semester': attendee.semester, 
+                        'Mittagessen': attendee.lunch, 
+                        'Mock Interview': attendee.mock_interview})
             writer.writerow(row)
 
     return error_code
