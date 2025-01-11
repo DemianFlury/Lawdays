@@ -94,10 +94,14 @@ def generate_list():
         return
 
     # no error, generate the list
-    done = list_generator.generate_list(settings)
+    code = list_generator.generate_list(settings)
 
-    if done:
+    if code == 0:
         messagebox.showinfo("Success", "Attendee list generated successfully.")
+    elif code == 1:
+        messagebox.showerror("Error", "Too many attendees, increase stand capacity or amount of timeslots.")
+    elif code == 2:
+        messagebox.showerror("Error", "The input file is not formatted correctly. Check documentation for more information.")
     else:
         messagebox.showerror("Error", "An error occurred while generating the attendee list.")
 

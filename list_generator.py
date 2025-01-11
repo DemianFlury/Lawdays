@@ -1,5 +1,6 @@
 import pulp
 import csv
+import random
 
 class Settings:
     def __init__(self, stands, timeslots, stand_capacity, input_path, output_path, num_priorities):
@@ -19,14 +20,21 @@ class Attendee:
         self.preferences = {priority: len(priorities) - i for i, priority in enumerate(priorities)}
 
 def generate_list(settings):
+    error_code = 0
+
     # Read the CSV file
     with open(settings.input_path, mode='r', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
-        attendees = [Attendee(row['Name'], 
+        attendees = []
+        try:
+            attendees = [Attendee(row['Name'], 
                               row['Email'], 
                               [row[f'Priorität{i+1}'] for i in range(settings.num_priorities)],
                               row['Studiengang'],
                               row['Semester']) for row in reader]
+        except KeyError:
+            error_code = 2
+            return error_code
 
     names = [attendee.name for attendee in attendees]
     timeslots = list(range(1, settings.timeslots + 1))
@@ -79,6 +87,23 @@ def generate_list(settings):
                     output[n][t - 1] = s
                     break
 
+
+    # Post-processing: Ensure no timeslot is empty
+    for t in timeslots:
+        assigned = [output[n][t - 1] for n in names if output[n][t - 1]]
+        if len(assigned) < len(names):
+            unassigned = [n for n in names if not output[n][t - 1]]
+            available_stands = {s: settings.stand_capacity - assigned.count(s) for s in settings.stands}
+            for n in unassigned:
+                available_stands = {s: cap for s, cap in available_stands.items() if cap > 0 and s not in output[n]}
+                if available_stands:
+                    random_stand = random.choice(list(available_stands.keys()))
+                    output[n][t - 1] = random_stand
+                    available_stands[random_stand] -= 1
+                else:
+                    error_code = 1
+    
+
     # Write the output list to a new CSV file
     with open(settings.output_path, mode='w', newline='') as csvfile:
         fieldnames = ['Name', 'Email'] + [f'Timeslot {t}' for t in timeslots] + ['Studiengang', 'Semester']
@@ -90,4 +115,4 @@ def generate_list(settings):
             row.update({'Studiengang': attendee.major, 'Semester': attendee.semester})
             writer.writerow(row)
 
-    return True
+    return error_code
