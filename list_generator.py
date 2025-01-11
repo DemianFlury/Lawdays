@@ -110,7 +110,7 @@ def generate_list(settings):
 
     # Write the output list to a new CSV file
     with open(settings.output_path, mode='w', newline='') as csvfile:
-        fieldnames = ['Name', 'Email'] + [f'Timeslot {t}' for t in timeslots] + ['Studiengang', 'Semester']
+        fieldnames = ['Name', 'Email'] + [f'Timeslot {t}' for t in timeslots] + ['Studiengang', 'Semester', 'Mittagessen', 'Mock Interview']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for attendee in attendees:
