@@ -170,5 +170,8 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+# vscode files
+.vscode/
+
 # test files
 .csv
