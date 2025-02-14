@@ -40,6 +40,16 @@ def generate_list(settings):
             error_code = 2
             return error_code
 
+    # Check if any attendee has duplicate priorities
+    # If so, assign a random priority to the duplicate
+    for attendee in attendees:
+        unique_priorities = list(set(attendee.preferences.keys()))
+        while len(unique_priorities) < settings.num_priorities:
+            rng = random.randint(0, len(settings.stands) - 1)
+            if(settings.stands[rng] not in unique_priorities):
+                unique_priorities.append(settings.stands[rng])
+        attendee.preferences = {priority: settings.num_priorities - i for i, priority in enumerate(unique_priorities)}
+
     names = [attendee.name for attendee in attendees]
     timeslots = list(range(1, settings.timeslots + 1))
 
@@ -73,15 +83,6 @@ def generate_list(settings):
     # Solve the problem
     problem.solve()
 
-    # Debugging output: Print the status of the solution
-    print("Status:", pulp.LpStatus[problem.status])
-
-    # Debugging output: Print the values of the decision variables
-    for n in names:
-        for t in timeslots:
-            for s in settings.stands:
-                print(f"x[{n}][{s}][{t}] = {x[n][s][t].varValue}")
-
     # Output results
     output = {n: [""] * len(timeslots) for n in names}
     for n in names:
@@ -90,23 +91,6 @@ def generate_list(settings):
                 if pulp.value(x[n][s][t]) == 1:
                     output[n][t - 1] = s
                     break
-
-
-    # Post-processing: Ensure no timeslot is empty
-    for t in timeslots:
-        assigned = [output[n][t - 1] for n in names if output[n][t - 1]]
-        if len(assigned) < len(names):
-            unassigned = [n for n in names if not output[n][t - 1]]
-            available_stands = {s: settings.stand_capacity - assigned.count(s) for s in settings.stands}
-            for n in unassigned:
-                available_stands = {s: cap for s, cap in available_stands.items() if cap > 0 and s not in output[n]}
-                if available_stands:
-                    random_stand = random.choice(list(available_stands.keys()))
-                    output[n][t - 1] = random_stand
-                    available_stands[random_stand] -= 1
-                else:
-                    error_code = 1
-    
 
     # Write the output list to a new CSV file
     with open(settings.output_path, mode='w', newline='') as csvfile:
