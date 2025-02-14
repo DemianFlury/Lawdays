@@ -27,6 +27,15 @@ def open_settings():
         if not num_priorities_entry.get():
             messagebox.showerror("Error", "Please enter the number of priorities.")
             return
+        if timeslots_entry.get().isnumeric() == False:
+            messagebox.showerror("Error", "Timeslots must be a number.")
+            return
+        if stand_capacity_entry.get().isnumeric() == False:
+            messagebox.showerror("Error", "Stand capacity must be a number.")
+            return
+        if num_priorities_entry.get().isnumeric() == False:
+            messagebox.showerror("Error", "Number of priorities must be a number.")
+            return
         
         settings.stands = stands_entry.get().split(',')
         settings.timeslots = int(timeslots_entry.get())
