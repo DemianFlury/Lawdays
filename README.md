@@ -5,9 +5,9 @@ Python GUI for creating an attendee List
 
 ### 1. CSV-Datei vorbereiten
 
-Da die Software keine Excel-Dataeien (xslx) lesen kann, muss die aus dem MS-Forms extrahierte Excel-Tabelle in eine CSV-Datei umgewandelt werden.
+Da die Software keine Excel-Dataeien (.xslx) lesen kann, muss die aus dem MS-Forms extrahierte Excel-Tabelle in eine CSV-Datei umgewandelt werden.
 
-Bevor das gemacht wird sollten allerdings die Spaltennamen bereinigt werden. Das Programm erwartet, dass die Spaltennamen immer gleich sind, weswegen diese eventuell angepasst werden sollten.
+Bevor das gemacht wird sollten allerdings die Spaltennamen bereinigt werden. Das Programm erwartet, dass die Spaltennamen immer gleich sind, weswegen diese eventuell angepasst werden müssen.
 Es spielt keine Rolle, in welcher Reihenfolge die Spalten aufgeführt sind, es ist nur wichtig, dass sie vorhanden sind. Die Spalten heissen wie folgt: (TN = Teilnehmer/in)
 
 |Spaltenname|Erwartete Werte|
@@ -26,22 +26,24 @@ Die mit "optional" ergänzten Spalten müssen vorhanden sein, können aber leer 
 Die erste Zeile der Excel-Tabelle sollte danach ungefähr so aussehen; die Reihenfolge und weitere im Excel vorhandene Spalten spielen keine Rolle.
 <img src="img/first_col.png" width="900">
 
+Beispiele für funktionierende CSV- Dateien sind [hier](/test_files/) zu finden.
+
 ### 2. Einstellungen setzen
 
 <img src="img/gui_settings.png" width="600"><br>
-Damit das Programm die Verteilung optimal kalkulieren kann, muss es einige Dinge wissen. Um diese Einzustellen im Hauptfenster auf "Settings" klicken.
+Damit das Programm die Verteilung optimal kalkulieren kann, muss es einige Dinge wissen. Um diese Einstellungen zu treffen, im Hauptfenster auf "Settings" klicken.
 
 
 Dort angekommen benötigt es vier Dinge:
 
 |Einstellung|Erwarteter Wert|
 |---|---|
-|Stands|Eine mit einem Komma (,) separierte Liste mit den Namen aller Aussteller|
+|Stands|Eine mit einem Komma (,) separierte Liste mit den Namen aller Aussteller. Diese müssen gleich geschrieben sein wie im Anmeldeformular|
 |Timeslots|Anzahl Runden in der Rotation Fair|
 |Stand Capacity|Anzahl TN, die gleichzeitig an einem Tisch sitzen können|
-|Number of Priorities|Anzahl Prioritäten, die die TN bei der Anmeldung angeben konnten. Auch die Anzahl Spalten, welche in der Excel / CSV Datei als Prioritäten angegeben sind|
+|Number of Priorities|Anzahl Prioritäten, die die TN bei der Anmeldung angeben können. Somit auch die Anzahl Spalten, welche in der CSV Datei als Prioritäten angegeben sind|
 
-Um die Liste der Aussteller zu kreieren, empfehle ich, die Liste zuerst in Word oder Notepad zu erstellen und kontrollieren. Wenn alle Namen richtig (heisst gleich wie im Anmeldungsformular) geschrieben sind, kann die liste in das Feld kopiert werden.
+Um die Liste der Aussteller zu kreieren, empfehle ich, die Liste zuerst in Word oder Notepad zu erstellen und kontrollieren. Wenn alle Namen richtig (heisst gleich wie im Anmeldeformular / CSV Datei) geschrieben sind, kann die liste in das Feld kopiert werden.
 **ACHTUNG:** keine Zeilenumschläge, diese werden sonst als Aussteller interpretiert!
 
 Die Einstellungen werden nur temporär gespeichert. Dies hat zur Konsequenz, dass jedes Mal wenn das Programm neu geöffnet wird, alle Einstellungen neu gesetzt werden müssen.
