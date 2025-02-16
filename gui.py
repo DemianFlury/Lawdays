@@ -108,7 +108,7 @@ def generate_list():
     if code == 0:
         messagebox.showinfo("Success", "Attendee list generated successfully.")
     elif code == 1:
-        messagebox.showerror("Error", "Some attendees have empty timeslots. Manual correction is required.")
+        messagebox.showerror("Error", "There is not enough space at each stand to assign all attendees.")
     elif code == 2:
         messagebox.showerror("Error", "The input file is not formatted correctly. Check documentation for more information.")
     else:
