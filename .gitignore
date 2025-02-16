@@ -175,3 +175,6 @@ cython_debug/
 
 # test files
 .csv
+
+# cbc files for packaging
+Cbc-2.10.3/
