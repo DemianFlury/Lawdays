@@ -25,7 +25,7 @@ def generate_list(settings):
     error_code = 0
 
     # Read the CSV file
-    with open(settings.input_path, mode='r', newline='') as csvfile:
+    with open(settings.input_path, mode='r', newline='', encoding='utf-8-sig') as csvfile:
         reader = csv.DictReader(csvfile)
         attendees = []
         try:
@@ -91,6 +91,19 @@ def generate_list(settings):
                 if pulp.value(x[n][s][t]) == 1:
                     output[n][t - 1] = s
                     break
+
+    # Check for any empty timeslots and fill them
+    for n in names:
+        for t in timeslots:
+            if not output[n][t - 1]:
+                available_stands = {s: settings.stand_capacity - [output[name][t - 1] for name in names].count(s) for s in settings.stands}
+                available_stands = {s: cap for s, cap in available_stands.items() if cap > 0}
+                if available_stands:
+                    random_stand = random.choice(list(available_stands.keys()))
+                    output[n][t - 1] = random_stand
+                    available_stands[random_stand] -= 1
+                else:
+                    error_code = 1
 
     # Write the output list to a new CSV file
     with open(settings.output_path, mode='w', newline='') as csvfile:
