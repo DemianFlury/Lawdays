@@ -1,6 +1,8 @@
 import pulp
 import csv
 import random
+import os
+import sys
 
 class Settings:
     def __init__(self, stands, timeslots, stand_capacity, input_path, output_path, num_priorities):
@@ -81,7 +83,14 @@ def generate_list(settings):
             problem += pulp.lpSum(x[n][s][t] for t in timeslots) <= 1
 
     # Solve the problem
-    problem.solve()
+    if getattr(sys, 'frozen', False):
+        # If running as a PyInstaller bundle
+        solverdir = os.path.join(sys._MEIPASS, 'cbc.exe\\cbc.exe')
+    else:
+        # If running in a normal Python environment
+        solverdir = 'Cbc-2.10.12/bin/cbc.exe'
+    solver = pulp.COIN_CMD(path=solverdir)
+    problem.solve(solver)
 
     # Output results
     output = {n: [""] * len(timeslots) for n in names}
