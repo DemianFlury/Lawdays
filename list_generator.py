@@ -1,6 +1,8 @@
 import pulp
 import csv
 import random
+import os
+import sys
 
 class Settings:
     def __init__(self, stands, timeslots, stand_capacity, input_path, output_path, num_priorities):
@@ -25,7 +27,7 @@ def generate_list(settings):
     error_code = 0
 
     # Read the CSV file
-    with open(settings.input_path, mode='r', newline='') as csvfile:
+    with open(settings.input_path, mode='r', newline='', encoding='utf-8-sig') as csvfile:
         reader = csv.DictReader(csvfile)
         attendees = []
         try:
@@ -81,7 +83,14 @@ def generate_list(settings):
             problem += pulp.lpSum(x[n][s][t] for t in timeslots) <= 1
 
     # Solve the problem
-    problem.solve()
+    if getattr(sys, 'frozen', False):
+        # If running as a PyInstaller bundle
+        solverdir = os.path.join(sys._MEIPASS, 'cbc.exe\\cbc.exe')
+    else:
+        # If running in a normal Python environment
+        solverdir = 'Cbc-2.10.12/bin/cbc.exe'
+    solver = pulp.COIN_CMD(path=solverdir)
+    problem.solve(solver)
 
     # Output results
     output = {n: [""] * len(timeslots) for n in names}
@@ -91,6 +100,19 @@ def generate_list(settings):
                 if pulp.value(x[n][s][t]) == 1:
                     output[n][t - 1] = s
                     break
+
+    # Check for any empty timeslots and fill them
+    for n in names:
+        for t in timeslots:
+            if not output[n][t - 1]:
+                available_stands = {s: settings.stand_capacity - [output[name][t - 1] for name in names].count(s) for s in settings.stands}
+                available_stands = {s: cap for s, cap in available_stands.items() if cap > 0}
+                if available_stands:
+                    random_stand = random.choice(list(available_stands.keys()))
+                    output[n][t - 1] = random_stand
+                    available_stands[random_stand] -= 1
+                else:
+                    error_code = 1
 
     # Write the output list to a new CSV file
     with open(settings.output_path, mode='w', newline='') as csvfile:
