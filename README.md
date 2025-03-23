@@ -3,9 +3,9 @@ Python GUI for creating an attendee List
 
 # Schritt für Schritt Anleitung
 
+
 ### 1. CSV-Datei vorbereiten
 
-Da die Software keine Excel-Dataeien (.xslx) lesen kann, muss die aus dem MS-Forms extrahierte Excel-Tabelle in eine CSV-Datei umgewandelt werden.
 
 Bevor das gemacht wird sollten allerdings die Spaltennamen bereinigt werden. Das Programm erwartet, dass die Spaltennamen immer gleich sind, weswegen diese eventuell angepasst werden müssen.
 Es spielt keine Rolle, in welcher Reihenfolge die Spalten aufgeführt sind, es ist nur wichtig, dass sie vorhanden sind. Die Spalten heissen wie folgt: (TN = Teilnehmer/in)
@@ -25,6 +25,12 @@ Die mit "optional" ergänzten Spalten müssen vorhanden sein, können aber leer 
 
 Die erste Zeile der Excel-Tabelle sollte danach ungefähr so aussehen; die Reihenfolge und weitere im Excel vorhandene Spalten spielen keine Rolle.
 <img src="img/first_col.png" width="900">
+
+Danach unter **Datei** -> **Speichern unter** als **CSV UTF-8 durch Trennzeichen getrennt** abspeichern
+<img src="img/save_as.png" width="900">
+
+Danach die Datei mit Rechtsklick **Öffnen mit** -> **Editor** öffnen und unter **Bearbeiten** -> **Ersetzen** alle Semikolon (;) mit Kommas (,) ersetzen
+<img src="img/replace.png" width="700">
 
 Beispiele für funktionierende CSV- Dateien sind [hier](/test_files/) zu finden.
 
@@ -61,7 +67,21 @@ Dasselbe gilt beim "Output File", an diesem Ort wird die neue Tabelle mit der Te
 
 Jetzt muss nur noch der "Generate"-Knopf betätigt werden. Wenn alles richtig gemacht wurde, poppt eine Bestätigung auf.
 
-<img src="img/success.png" width="350"><br><br>
+<img src="img/success.png" width="350">
+
+### 5. Output für Excel lesbar machen
+
+Damit nun die ausgegebene CSV-Datei von Excel richtig verstanden wird, müssen wir diese noch richtig formatieren.
+
+Dazu die Datei in Excel öffnen und die komplette Spalte "A" anwählen.
+
+Dann zum Reiter **Daten** navigieren, und dort auf **Text in Spalten** klicken
+
+<img src="img/formatting.png" width="700">
+
+Auf **Weiter** klicken und dort nur **Kommas** anwählen, dann auf **Fertig Stellen** klicken. Die Excel Tabelle sollte jetzt schön formatiert sein
+
+<br><br>
 
 # Vorgehen bei Problemen
 
