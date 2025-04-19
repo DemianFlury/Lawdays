@@ -102,13 +102,16 @@ def generate_list(settings):
                     break
 
     # Check for any empty timeslots and fill them
+    available_stands = {s: settings.stand_capacity - [output[name][t - 1] for name in names].count(s) for s in settings.stands}
+    available_stands = {s: cap for s, cap in available_stands.items() if cap > 0}
     for n in names:
         for t in timeslots:
             if not output[n][t - 1]:
-                available_stands = {s: settings.stand_capacity - [output[name][t - 1] for name in names].count(s) for s in settings.stands}
-                available_stands = {s: cap for s, cap in available_stands.items() if cap > 0}
                 if available_stands:
-                    random_stand = random.choice(list(available_stands.keys()))
+                    while True:
+                        random_stand = random.choice(list(available_stands.keys()))
+                        if random_stand not in output[n]:
+                            break
                     output[n][t - 1] = random_stand
                     available_stands[random_stand] -= 1
                 else:
