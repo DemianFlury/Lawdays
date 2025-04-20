@@ -28,7 +28,7 @@ def generate_list(settings):
 
     # Read the CSV file
     with open(settings.input_path, mode='r', newline='', encoding='utf-8-sig') as csvfile:
-        reader = csv.DictReader(csvfile)
+        reader = csv.DictReader(csvfile, delimiter=';')
         attendees = []
         try:
             attendees = [Attendee(row['Name'], 
@@ -102,10 +102,9 @@ def generate_list(settings):
                     break
 
     # Check for any empty timeslots and fill them
-    available_stands = {s: settings.stand_capacity - [output[name][t - 1] for name in names].count(s) for s in settings.stands}
-    available_stands = {s: cap for s, cap in available_stands.items() if cap > 0}
-    for n in names:
-        for t in timeslots:
+    for t in timeslots:
+        available_stands = {s: settings.stand_capacity - [output[name][t - 1] for name in names].count(s) for s in settings.stands}
+        for n in names:
             if not output[n][t - 1]:
                 if available_stands:
                     while True:
@@ -114,13 +113,15 @@ def generate_list(settings):
                             break
                     output[n][t - 1] = random_stand
                     available_stands[random_stand] -= 1
+                    if available_stands[random_stand] == 0:
+                        available_stands = {s: cap for s, cap in available_stands.items() if cap > 0}
                 else:
                     error_code = 1
 
     # Write the output list to a new CSV file
     with open(settings.output_path, mode='w', newline='') as csvfile:
         fieldnames = ['Name', 'Email'] + [f'Timeslot {t}' for t in timeslots] + ['Studiengang', 'Semester', 'Mittagessen', 'Mock Interview']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=';')
         writer.writeheader()
         for attendee in attendees:
             row = {'Name': attendee.name, 'Email': attendee.email}
