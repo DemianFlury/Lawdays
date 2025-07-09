@@ -29,11 +29,6 @@ Die erste Zeile der Excel-Tabelle sollte danach ungefähr so aussehen; die Reihe
 Danach unter **Datei** -> **Speichern unter** als **CSV UTF-8 durch Trennzeichen getrennt** abspeichern
 <img src="img/save_as.png" width="900">
 
-Danach die Datei mit Rechtsklick **Öffnen mit** -> **Editor** öffnen und unter **Bearbeiten** -> **Ersetzen** alle Semikolon (;) mit Kommas (,) ersetzen
-<img src="img/replace.png" width="700">
-
-Beispiele für funktionierende CSV- Dateien sind [hier](/test_files/) zu finden.
-
 ### 2. Einstellungen setzen
 
 <img src="img/gui_settings.png" width="600"><br>
