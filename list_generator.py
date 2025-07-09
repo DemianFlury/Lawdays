@@ -124,7 +124,7 @@ def generate_list(settings):
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=';')
         writer.writeheader()
         for attendee in attendees:
-            row = {'Name': attendee.name, 'Email': attendee.email}
+            row = {'Name': f'"{attendee.name}"', 'Email': attendee.email}
             row.update({f'Timeslot {t}': output[attendee.name][t - 1] for t in timeslots})
             row.update({'Studiengang': attendee.major, 
                         'Semester': attendee.semester, 
